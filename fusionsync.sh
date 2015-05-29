@@ -17,7 +17,7 @@ usage() {
 
 # attempt connection to db with supplied credentials
 db_conn_check() {
-  mysql -u "$DB_USER" -p"$DB_PASSWD" -e 'use $1'
+  mysql -u "$DB_USER" -p"$DB_PASSWD" -e "use $1"
   echo $?
 }
 
