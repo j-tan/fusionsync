@@ -29,8 +29,9 @@ fi
 while [ "$1" != "" ]; do
   case $1 in
     -u | --update )
-      if [ DELETE_SET == "false" ]; then
+      if [ "$DELETE_SET" == "false" ]; then
         UPDATE="true"
+        UPDATE_SET="true"
       else
         usage
         exit 1
@@ -38,8 +39,9 @@ while [ "$1" != "" ]; do
       ;;
     -d | --delete )
       shift
-      if [ UPDATE_SET == "false" ]; then
+      if [ "$UPDATE_SET" == "false" ]; then
         ENTITY_ID_DROP="$1"
+        DELETE_SET="true"
       else
         usage
         exit 1
