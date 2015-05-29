@@ -23,10 +23,3 @@
   [ "${lines[0]}" = "Invalid user ''" ]
   [ "${lines[1]}" = "Usage: map_update.sh [--update | --delete ENTITYID] --user DBUSER --password PASSWORD" ]
 }
-
-@test "missing/invalid user provided" {
-  run ../fusionsync.sh --user --password
-  [ "$status" -eq 1 ]
-  [ "${lines[0]}" = "Invalid user '--password'" ]
-  [ "${lines[1]}" = "Usage: map_update.sh [--update | --delete ENTITYID] --user DBUSER --password PASSWORD" ]
-}
