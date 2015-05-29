@@ -64,8 +64,7 @@ while [ "$1" != "" ]; do
   shift
 done
 
-retval=$(db_conn_check DB_NAME)
-if [ $retval == 1 ]; then
+if [[ $(db_conn_check $DB_NAME) == 1 ]]; then
   # failure
   printf "Failed to connect to database\n"
   usage
