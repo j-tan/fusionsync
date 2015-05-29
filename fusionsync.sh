@@ -12,7 +12,7 @@ DB_PASSWD=""
 DB_NAME="drupaldb"
 
 usage() {
-  printf "Usage: map_update.sh [--update | --delete ENTITYID] --user DBUSER --password PASSWORD\n"
+  printf "Usage: fusionsync.sh [--update | --delete ENTITYID] --user DBUSER --password PASSWORD\n"
 }
 
 # attempt connection to db with supplied credentials
