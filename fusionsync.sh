@@ -9,9 +9,16 @@ UPDATE="false"
 ENTITY_ID_DROP=""
 DB_USER=""
 DB_PASSWD=""
+DB_NAME="drupaldb"
 
 usage() {
   printf "Usage: map_update.sh [--update | --delete ENTITYID] --user DBUSER --password PASSWORD\n"
+}
+
+# attempt connection to db with supplied credentials
+db_conn_check() {
+  mysql -u "$DB_USER" -p"$DB_PASSWD" -e 'use $1'
+  echo $?
 }
 
 if [ "$#" -eq 0 ]; then
@@ -54,4 +61,13 @@ while [ "$1" != "" ]; do
   esac
   shift
 done
+
+retval=$(db_conn_check DB_NAME)
+if [ $retval == 1 ]; then
+  # failure
+  printf "Failed to connect to database\n"
+  usage
+  exit 1
+fi
+
 exit
