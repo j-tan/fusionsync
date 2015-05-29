@@ -16,3 +16,17 @@
   [ "${lines[0]}" = "Unknown argument '--unknown'" ]
   [ "${lines[1]}" = "Usage: map_update.sh [--update | --delete ENTITYID] --user DBUSER --password PASSWORD" ]
 }
+
+@test "no/invalid user provided" {
+  run ..fusionsync.sh --user
+  [ "$status" -eq 1 ]
+  [ "${lines[0]}" = "Invalid user ''" ]
+  [ "${lines[1]}" = "Usage: map_update.sh [--update | --delete ENTITYID] --user DBUSER --password PASSWORD" ]
+}
+
+@test "no/invalid user provided" {
+  run ..fusionsync.sh --user --password
+  [ "$status" -eq 1 ]
+  [ "${lines[0]}" = "Invalid user '--password'" ]
+  [ "${lines[1]}" = "Usage: map_update.sh [--update | --delete ENTITYID] --user DBUSER --password PASSWORD" ]
+}
