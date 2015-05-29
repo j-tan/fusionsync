@@ -50,6 +50,11 @@ while [ "$1" != "" ]; do
     --user )
       shift
       DB_USER="$1"
+      if [ "$DB_USER" == "" ]; then
+        printf "Invalid user '$DB_USER'\n"
+        usage
+        exit 1
+      fi
       ;;
     --password )
       shift
