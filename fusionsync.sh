@@ -76,4 +76,7 @@ if [[ $(db_conn_check $DB_NAME) == 1 ]]; then
   exit 1
 fi
 
+# count the number of rows in the country table
+count=$(mysql -u "$DB_USER" -p"$DB_PASSWD" "$DB_NAME" -se "SELECT COUNT(*) FROM field_data_field_country;")
+
 exit
