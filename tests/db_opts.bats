@@ -6,7 +6,7 @@
 }
 
 @test "retrieve count from mysql db" {
-  run ../fusionsync.sh
+  run ../fusionsync.sh --user drupaluser --password <insertPasswdHere>
   [ "$status" -eq 0 ]
   [ "$output" = "Count: 39" ]
 }
