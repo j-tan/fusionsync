@@ -76,4 +76,30 @@ if [[ $(db_conn_check $DB_NAME) == 1 ]]; then
   exit 1
 fi
 
+count=$(mysql -u "$DB_USER" -p"$DB_PASSWD" "$DB_NAME" -se "SELECT COUNT(*) FROM field_data_field_country;")
+query_result=$(mysql -u "$DB_USER" -p"$DB_PASSWD" "$DB_NAME" -sse \
+  "SELECT country.field_country_value, \
+  field_data_field_affiliation.field_affiliation_value, \
+  field_data_field_operators.field_operators_value, \
+  field_data_field_signed_mou.field_signed_mou_value, \
+  field_data_field_saml.field_saml_value, \
+  field_data_field_saml_complete.field_saml_complete_value, \
+  field_data_field_edugain.field_edugain_value, \
+  field_data_field_edugain_complete.field_edugain_complete_value, \
+  field_data_field_eduroam.field_eduroam_value, \
+  field_data_field_eduroam_complete.field_eduroam_complete_value, \
+  field_data_field_progress.field_progress_value, \
+  field_data_field_flagurl.field_flagurl_value \
+  FROM field_data_field_country AS country \
+  LEFT JOIN field_data_field_affiliation ON country.entity_id = field_data_field_affiliation.entity_id \
+  LEFT JOIN field_data_field_operators ON country.entity_id = field_data_field_operators.entity_id \
+  LEFT JOIN field_data_field_signed_mou ON country.entity_id = field_data_field_signed_mou.entity_id \
+  LEFT JOIN field_data_field_saml ON country.entity_id = field_data_field_saml.entity_id \
+  LEFT JOIN field_data_field_saml_complete ON country.entity_id = field_data_field_saml_complete.entity_id \
+  LEFT JOIN field_data_field_edugain ON country.entity_id = field_data_field_edugain.entity_id \
+  LEFT JOIN field_data_field_edugain_complete ON country.entity_id = field_data_field_edugain_complete.entity_id \
+  LEFT JOIN field_data_field_eduroam ON country.entity_id = field_data_field_eduroam.entity_id \
+  LEFT JOIN field_data_field_eduroam_complete ON country.entity_id = field_data_field_eduroam_complete.entity_id \
+  LEFT JOIN field_data_field_progress ON country.entity_id = field_data_field_progress.entity_id \
+  LEFT JOIN field_data_field_flagurl ON country.entity_id = field_data_field_flagurl.entity_id;")
 exit
