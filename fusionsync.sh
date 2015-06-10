@@ -76,7 +76,13 @@ if [[ $(db_conn_check $DB_NAME) == 1 ]]; then
   exit 1
 fi
 
-mysql --batch --raw -u "$DB_USER" -p"$DB_PASSWD" "$DB_NAME" -sse \
+IFS=$'\t'
+while read -r country affiliation operators signed_mou saml saml_complete \
+  edugain edugain_complete eduroam eduroam_complete progress flag_url; do
+  echo "$country $affiliation $operators $signed_mou $saml $saml_complete \
+  $edugain $edugain_complete $eduroam $eduroam_complete $progress $flag_url"
+done <<< \
+`mysql --batch --raw -u "$DB_USER" -p"$DB_PASSWD" "$DB_NAME" -sse \
   "SELECT country.field_country_value, \
   field_data_field_affiliation.field_affiliation_value, \
   field_data_field_operators.field_operators_value, \
@@ -100,13 +106,6 @@ mysql --batch --raw -u "$DB_USER" -p"$DB_PASSWD" "$DB_NAME" -sse \
   LEFT JOIN field_data_field_eduroam ON country.entity_id = field_data_field_eduroam.entity_id \
   LEFT JOIN field_data_field_eduroam_complete ON country.entity_id = field_data_field_eduroam_complete.entity_id \
   LEFT JOIN field_data_field_progress ON country.entity_id = field_data_field_progress.entity_id \
-  LEFT JOIN field_data_field_flagurl ON country.entity_id = field_data_field_flagurl.entity_id;" > /tmp/output.txt
-
-IFS=$'\t'
-while read -r country affiliation operators signed_mou saml saml_complete \
-  edugain edugain_complete eduroam eduroam_complete progress flag_url; do
-  echo "$country $affiliation $operators $signed_mou $saml $saml_complete \
-  $edugain $edugain_complete $eduroam $eduroam_complete $progress $flag_url"
-done < /tmp/output.txt
+  LEFT JOIN field_data_field_flagurl ON country.entity_id = field_data_field_flagurl.entity_id;"`
 unset IFS
 exit
