@@ -21,6 +21,34 @@ db_conn_check() {
   echo $?
 }
 
+get_db_data() {
+  mysql --batch --raw -u "$DB_USER" -p"$DB_PASSWD" "$DB_NAME" -sse \
+  "SELECT country.field_country_value, \
+  field_data_field_affiliation.field_affiliation_value, \
+  field_data_field_operators.field_operators_value, \
+  field_data_field_signed_mou.field_signed_mou_value, \
+  field_data_field_saml.field_saml_value, \
+  field_data_field_saml_complete.field_saml_complete_value, \
+  field_data_field_edugain.field_edugain_value, \
+  field_data_field_edugain_complete.field_edugain_complete_value, \
+  field_data_field_eduroam.field_eduroam_value, \
+  field_data_field_eduroam_complete.field_eduroam_complete_value, \
+  field_data_field_progress.field_progress_value, \
+  field_data_field_flagurl.field_flagurl_value \
+  FROM field_data_field_country AS country \
+  LEFT JOIN field_data_field_affiliation ON country.entity_id = field_data_field_affiliation.entity_id \
+  LEFT JOIN field_data_field_operators ON country.entity_id = field_data_field_operators.entity_id \
+  LEFT JOIN field_data_field_signed_mou ON country.entity_id = field_data_field_signed_mou.entity_id \
+  LEFT JOIN field_data_field_saml ON country.entity_id = field_data_field_saml.entity_id \
+  LEFT JOIN field_data_field_saml_complete ON country.entity_id = field_data_field_saml_complete.entity_id \
+  LEFT JOIN field_data_field_edugain ON country.entity_id = field_data_field_edugain.entity_id \
+  LEFT JOIN field_data_field_edugain_complete ON country.entity_id = field_data_field_edugain_complete.entity_id \
+  LEFT JOIN field_data_field_eduroam ON country.entity_id = field_data_field_eduroam.entity_id \
+  LEFT JOIN field_data_field_eduroam_complete ON country.entity_id = field_data_field_eduroam_complete.entity_id \
+  LEFT JOIN field_data_field_progress ON country.entity_id = field_data_field_progress.entity_id \
+  LEFT JOIN field_data_field_flagurl ON country.entity_id = field_data_field_flagurl.entity_id;"
+}
+
 if [ "$#" -eq 0 ]; then
   usage
   exit 1
@@ -76,36 +104,10 @@ if [[ $(db_conn_check $DB_NAME) == 1 ]]; then
   exit 1
 fi
 
-IFS=$'\t'
-while read -r country affiliation operators signed_mou saml saml_complete \
+IFS=$'\t'; get_db_data | while read -r country affiliation operators signed_mou saml saml_complete \
   edugain edugain_complete eduroam eduroam_complete progress flag_url; do
   echo "$country $affiliation $operators $signed_mou $saml $saml_complete \
   $edugain $edugain_complete $eduroam $eduroam_complete $progress $flag_url"
-done <<< \
-`mysql --batch --raw -u "$DB_USER" -p"$DB_PASSWD" "$DB_NAME" -sse \
-  "SELECT country.field_country_value, \
-  field_data_field_affiliation.field_affiliation_value, \
-  field_data_field_operators.field_operators_value, \
-  field_data_field_signed_mou.field_signed_mou_value, \
-  field_data_field_saml.field_saml_value, \
-  field_data_field_saml_complete.field_saml_complete_value, \
-  field_data_field_edugain.field_edugain_value, \
-  field_data_field_edugain_complete.field_edugain_complete_value, \
-  field_data_field_eduroam.field_eduroam_value, \
-  field_data_field_eduroam_complete.field_eduroam_complete_value, \
-  field_data_field_progress.field_progress_value, \
-  field_data_field_flagurl.field_flagurl_value \
-  FROM field_data_field_country AS country \
-  LEFT JOIN field_data_field_affiliation ON country.entity_id = field_data_field_affiliation.entity_id \
-  LEFT JOIN field_data_field_operators ON country.entity_id = field_data_field_operators.entity_id \
-  LEFT JOIN field_data_field_signed_mou ON country.entity_id = field_data_field_signed_mou.entity_id \
-  LEFT JOIN field_data_field_saml ON country.entity_id = field_data_field_saml.entity_id \
-  LEFT JOIN field_data_field_saml_complete ON country.entity_id = field_data_field_saml_complete.entity_id \
-  LEFT JOIN field_data_field_edugain ON country.entity_id = field_data_field_edugain.entity_id \
-  LEFT JOIN field_data_field_edugain_complete ON country.entity_id = field_data_field_edugain_complete.entity_id \
-  LEFT JOIN field_data_field_eduroam ON country.entity_id = field_data_field_eduroam.entity_id \
-  LEFT JOIN field_data_field_eduroam_complete ON country.entity_id = field_data_field_eduroam_complete.entity_id \
-  LEFT JOIN field_data_field_progress ON country.entity_id = field_data_field_progress.entity_id \
-  LEFT JOIN field_data_field_flagurl ON country.entity_id = field_data_field_flagurl.entity_id;"`
+done
 unset IFS
 exit
