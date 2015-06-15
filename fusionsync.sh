@@ -120,8 +120,12 @@ key="AIzaSyBPmZQT3CpatiuKpr-dXUEhAjeDTha1Syo"
 resourceID="10wEN3u3XsSdjmyZjlSvTqe8mNlpQWOjhzLlVp0rV"
 IFS=$'\t'; get_db_data | while read -r country affiliation operators signed_mou saml saml_complete \
   edugain edugain_complete eduroam eduroam_complete progress flag_url; do
-  echo "$country $affiliation $operators $signed_mou $saml $saml_complete \
-  $edugain $edugain_complete $eduroam $eduroam_complete $progress $flag_url"
+  if [ "$UPDATE" == "true" ]; then
+    SQL_QUERY=$(encode_space "SELECT ROWID FROM ${resourceID} WHERE Location='$(encode_space ${country})'")
+    status_code=$(curl -s -H "Content-Length:0" -X POST \
+      "https://www.googleapis.com/fusiontables/v2/query?sql=${SQL_QUERY}&key=${key}&alt=csv" \
+      | sed -n '2p')
+  fi
 done
 unset IFS
 exit
