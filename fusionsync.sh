@@ -125,6 +125,12 @@ IFS=$'\t'; get_db_data | while read -r country affiliation operators signed_mou 
     status_code=$(curl -s -H "Content-Length:0" -X POST \
       "https://www.googleapis.com/fusiontables/v2/query?sql=${SQL_QUERY}&key=${key}&alt=csv" \
       | sed -n '2p')
+    if [ ! "$status_code" == "" ] || [ ! -z "$status_code" ]; then
+      # row exists, must delete first
+      SQL_QUERY=$(encode_space "DELETE FROM ${resourceID} WHERE ROWID='${status_code}'")
+      curl -H "Content-Length:0" -H "Authorization: Bearer $access_token" \
+        -X POST "https://www.googleapis.com/fusiontables/v2/query?sql=${SQL_QUERY}&alt=csv"
+    fi
   fi
 done
 unset IFS
