@@ -58,7 +58,7 @@ encode_space() {
 }
 
 escape_chars() {
-  echo "$1" | sed -e 's/%/\\%/g' -e "s/'/\\\'/g"
+  echo "$1" | sed -e 's/%/\\%/g' -e "s/'/\\\'/g" -e 's/NULL//g'
 }
 
 if [ "$#" -eq 0 ]; then
