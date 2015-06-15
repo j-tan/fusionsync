@@ -11,6 +11,10 @@ DB_USER=""
 DB_PASSWD=""
 DB_NAME="drupaldb"
 
+source credentials.sh
+source common.sh
+ensure_fresh_access_token
+
 usage() {
   printf "Usage: fusionsync.sh [--update | --delete ENTITYID] --user DBUSER --password PASSWORD\n"
 }
