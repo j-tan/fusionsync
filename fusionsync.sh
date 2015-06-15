@@ -131,6 +131,24 @@ IFS=$'\t'; get_db_data | while read -r country affiliation operators signed_mou 
       curl -H "Content-Length:0" -H "Authorization: Bearer $access_token" \
         -X POST "https://www.googleapis.com/fusiontables/v2/query?sql=${SQL_QUERY}&alt=csv"
     fi
+    SQL_QUERY=$(encode_space "INSERT INTO ${resourceID} \
+      ('Location'%2C'Affiliation'%2C'Operators'%2C'SAML'%2C'eduGAIN'%2C\
+      'eduroam'%2C'Signed MoU'%2C'Progress'%2C'FlagURL'%2C\
+      'SAML-complete'%2C'eduGAIN-complete'%2C'eduroam-complete') \
+      VALUES ('$(escape_chars ${country})'%2C\
+      '$(escape_chars ${affiliation})'%2C\
+      '$(escape_chars ${operators})'%2C\
+      '$(escape_chars ${saml})'%2C\
+      '$(escape_chars ${edugain})'%2C\
+      '$(escape_chars ${eduroam})'%2C\
+      '$(escape_chars ${signed_mou})'%2C\
+      '$(escape_chars ${progress})'%2C\
+      '$(escape_chars ${flag_url})'%2C\
+      '$(escape_chars ${saml_complete})'%2C\
+      '$(escape_chars ${edugain_complete})'%2C\
+      '$(escape_chars ${eduroam_complete})')")
+    curl -H "Content-Length:0" -H "Authorization: Bearer $access_token" -X POST \
+      "https://www.googleapis.com/fusiontables/v2/query?sql=${SQL_QUERY}&alt=csv"
   fi
 done
 unset IFS
