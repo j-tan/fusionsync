@@ -104,6 +104,8 @@ if [[ $(db_conn_check $DB_NAME) == 1 ]]; then
   exit 1
 fi
 
+key="AIzaSyBPmZQT3CpatiuKpr-dXUEhAjeDTha1Syo"
+resourceID="10wEN3u3XsSdjmyZjlSvTqe8mNlpQWOjhzLlVp0rV"
 IFS=$'\t'; get_db_data | while read -r country affiliation operators signed_mou saml saml_complete \
   edugain edugain_complete eduroam eduroam_complete progress flag_url; do
   echo "$country $affiliation $operators $signed_mou $saml $saml_complete \
