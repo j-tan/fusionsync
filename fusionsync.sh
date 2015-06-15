@@ -49,6 +49,14 @@ get_db_data() {
   LEFT JOIN field_data_field_flagurl ON country.entity_id = field_data_field_flagurl.entity_id;"
 }
 
+encode_space() {
+  echo "$1" | sed 's/ /%20/g'
+}
+
+escape_chars() {
+  echo "$1" | sed -e 's/%/\%/g' -e "s/'/\\\'/g"
+}
+
 if [ "$#" -eq 0 ]; then
   usage
   exit 1
