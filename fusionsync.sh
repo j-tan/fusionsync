@@ -147,9 +147,11 @@ IFS=$'\t'; get_db_data | while read -r country affiliation operators signed_mou 
       '$(escape_chars ${saml_complete})'%2C\
       '$(escape_chars ${edugain_complete})'%2C\
       '$(escape_chars ${eduroam_complete})')")
+    printf "Inserting record for ${country}\n"
     curl -s -H "Content-Length:0" -H "Authorization: Bearer $access_token" -X POST \
       "https://www.googleapis.com/fusiontables/v2/query?sql=${SQL_QUERY}&alt=csv" > /dev/null
   fi
 done
 unset IFS
+printf "Database sync complete\n"
 exit
