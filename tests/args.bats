@@ -1,5 +1,5 @@
 @test "no arguments provided" {
-  run ../fusionsync.sh
+  run ./fusionsync.sh
   [ "$status" -eq 1 ]
   [ "$output" = "Usage: fusionsync.sh [--update | --delete COUNTRY] --user DBUSER --password PASSWORD" ]
 }
