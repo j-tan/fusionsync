@@ -160,10 +160,14 @@ if [ "$DELETE_SET" == "true" ]; then
   status_code=$(curl -s -H "Content-Length:0" -X POST \
     "https://www.googleapis.com/fusiontables/v2/query?sql=${SQL_QUERY}&key=${key}&alt=csv" \
     | sed -n '2p')
-  SQL_QUERY=$(encode_space "DELETE FROM ${resourceID} WHERE ROWID='${status_code}'")
-  printf "Deleting record for ${COUNTRY_DROP}\n"
-  curl -s -H "Content-Length:0" -H "Authorization: Bearer $access_token" \
-    -X POST "https://www.googleapis.com/fusiontables/v2/query?sql=${SQL_QUERY}&alt=csv" > /dev/null
+  if [ ! "$status_code" == "" ] || [ ! -z "$status_code" ]; then
+    SQL_QUERY=$(encode_space "DELETE FROM ${resourceID} WHERE ROWID='${status_code}'")
+    printf "Deleting record for ${COUNTRY_DROP}\n"
+    curl -s -H "Content-Length:0" -H "Authorization: Bearer $access_token" \
+      -X POST "https://www.googleapis.com/fusiontables/v2/query?sql=${SQL_QUERY}&alt=csv" > /dev/null
+  else
+    printf "Record for ${COUNTRY_DROP} does not exist on the fusion table\n"
+  fi
 fi
 
 unset IFS
