@@ -153,6 +153,19 @@ IFS=$'\t'; get_db_data | while read -r country affiliation operators signed_mou 
       "https://www.googleapis.com/fusiontables/v2/query?sql=${SQL_QUERY}&alt=csv" > /dev/null
   fi
 done
+
+if [ "$DELETE_SET" == "true" ]; then
+  # delete from fusion table
+  SQL_QUERY=$(encode_space "SELECT ROWID FROM ${resourceID} WHERE Location='$(encode_space ${COUNTRY_DROP})'")
+  status_code=$(curl -s -H "Content-Length:0" -X POST \
+    "https://www.googleapis.com/fusiontables/v2/query?sql=${SQL_QUERY}&key=${key}&alt=csv" \
+    | sed -n '2p')
+  SQL_QUERY=$(encode_space "DELETE FROM ${resourceID} WHERE ROWID='${status_code}'")
+  printf "Deleting record for ${COUNTRY_DROP}\n"
+  curl -s -H "Content-Length:0" -H "Authorization: Bearer $access_token" \
+    -X POST "https://www.googleapis.com/fusiontables/v2/query?sql=${SQL_QUERY}&alt=csv" > /dev/null
+fi
+
 unset IFS
 printf "Database sync complete\n"
 exit
