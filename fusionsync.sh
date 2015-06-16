@@ -53,6 +53,11 @@ get_db_data() {
   LEFT JOIN field_data_field_flagurl ON country.entity_id = field_data_field_flagurl.entity_id;"
 }
 
+get_countries() {
+  mysql --batch --raw -u "$DB_USER" -p"$DB_PASSWD" "$DB_NAME" -sse \
+    "SELECT GROUP_CONCAT(CONCAT('''', field_country_value, '''')) FROM field_data_field_country;"
+}
+
 encode_space_comma() {
   echo "$1" | sed -e 's/ /%20/g' -e 's/,/%2C/g'
 }
