@@ -158,8 +158,20 @@ if [ "$UPDATE" == "true" ]; then
     printf "Inserting record for ${country}\n"
     curl -s -H "Content-Length:0" -H "Authorization: Bearer $access_token" -X POST \
       "https://www.googleapis.com/fusiontables/v2/query?sql=${SQL_QUERY}&alt=csv" > /dev/null
-  fi
-done
+  done
+  unset IFS
+
+  SQL_DEL_LIST=$(encode_space_comma "SELECT ROWID FROM ${resourceID} \
+    WHERE Location NOT IN ($(get_countries))")
+  printf "Removing unused records\n"
+  curl -s -H "Content-Length:0" -H "Authorization: Bearer $access_token" -X POST \
+    "https://www.googleapis.com/fusiontables/v2/query?sql=${SQL_DEL_LIST}&alt=csv" \
+    | sed "1 d" | while read -r line; do
+      SQL_QUERY=$(encode_space_comma "DELETE FROM ${resourceID} WHERE ROWID='${line}'")
+      curl -s -H "Content-Length:0" -H "Authorization: Bearer $access_token" -X POST \
+        "https://www.googleapis.com/fusiontables/v2/query?sql=${SQL_QUERY}&alt=csv" > /dev/null
+  done
+fi
 
 if [ "$DELETE_SET" == "true" ]; then
   # delete from fusion table
@@ -177,6 +189,5 @@ if [ "$DELETE_SET" == "true" ]; then
   fi
 fi
 
-unset IFS
 printf "Database sync complete\n"
 exit
