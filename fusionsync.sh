@@ -6,7 +6,7 @@ DB_USER_SET="false"
 DB_PASSWD_SET="false"
 
 UPDATE="false"
-ENTITY_ID_DROP=""
+COUNTRY_DROP=""
 DB_USER=""
 DB_PASSWD=""
 DB_NAME="drupaldb"
@@ -16,7 +16,7 @@ source common.sh
 ensure_fresh_access_token
 
 usage() {
-  printf "Usage: fusionsync.sh [--update | --delete ENTITYID] --user DBUSER --password PASSWORD\n"
+  printf "Usage: fusionsync.sh [--update | --delete COUNTRY] --user DBUSER --password PASSWORD\n"
 }
 
 # attempt connection to db with supplied credentials
@@ -80,7 +80,7 @@ while [ "$1" != "" ]; do
     -d | --delete )
       shift
       if [ "$UPDATE_SET" == "false" ]; then
-        ENTITY_ID_DROP="$1"
+        COUNTRY_DROP="$1"
         DELETE_SET="true"
       else
         usage
@@ -118,6 +118,7 @@ fi
 
 key="AIzaSyBPmZQT3CpatiuKpr-dXUEhAjeDTha1Syo"
 resourceID="10wEN3u3XsSdjmyZjlSvTqe8mNlpQWOjhzLlVp0rV"
+
 IFS=$'\t'; get_db_data | while read -r country affiliation operators signed_mou saml saml_complete \
   edugain edugain_complete eduroam eduroam_complete progress flag_url; do
   if [ "$UPDATE" == "true" ]; then
