@@ -128,8 +128,8 @@ IFS=$'\t'; get_db_data | while read -r country affiliation operators signed_mou 
     if [ ! "$status_code" == "" ] || [ ! -z "$status_code" ]; then
       # row exists, must delete first
       SQL_QUERY=$(encode_space "DELETE FROM ${resourceID} WHERE ROWID='${status_code}'")
-      curl -H "Content-Length:0" -H "Authorization: Bearer $access_token" \
-        -X POST "https://www.googleapis.com/fusiontables/v2/query?sql=${SQL_QUERY}&alt=csv"
+      curl -s -H "Content-Length:0" -H "Authorization: Bearer $access_token" \
+        -X POST "https://www.googleapis.com/fusiontables/v2/query?sql=${SQL_QUERY}&alt=csv" > /dev/null
     fi
     SQL_QUERY=$(encode_space "INSERT INTO ${resourceID} \
       ('Location'%2C'Affiliation'%2C'Operators'%2C'SAML'%2C'eduGAIN'%2C\
@@ -147,8 +147,8 @@ IFS=$'\t'; get_db_data | while read -r country affiliation operators signed_mou 
       '$(escape_chars ${saml_complete})'%2C\
       '$(escape_chars ${edugain_complete})'%2C\
       '$(escape_chars ${eduroam_complete})')")
-    curl -H "Content-Length:0" -H "Authorization: Bearer $access_token" -X POST \
-      "https://www.googleapis.com/fusiontables/v2/query?sql=${SQL_QUERY}&alt=csv"
+    curl -s -H "Content-Length:0" -H "Authorization: Bearer $access_token" -X POST \
+      "https://www.googleapis.com/fusiontables/v2/query?sql=${SQL_QUERY}&alt=csv" > /dev/null
   fi
 done
 unset IFS
