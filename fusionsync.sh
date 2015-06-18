@@ -11,6 +11,8 @@ DB_USER=""
 DB_PASSWD=""
 DB_NAME="drupaldb"
 
+resourceID=""
+
 source credentials.sh
 source common.sh
 ensure_fresh_access_token
@@ -105,6 +107,16 @@ while [ "$1" != "" ]; do
       shift
       DB_PASSWD="$1"
       ;;
+    --tableid )
+      shift
+      if [ ! -z "$1" ]; then
+        resourceID="$1"
+      else
+        printf "No table ID provided\n"
+        usage
+        exit 1
+      fi
+      ;;
     * )
       printf "Unknown argument '$1'\n"
       usage
@@ -120,8 +132,6 @@ if [[ $(db_conn_check $DB_NAME) == 1 ]]; then
   usage
   exit 1
 fi
-
-resourceID="10wEN3u3XsSdjmyZjlSvTqe8mNlpQWOjhzLlVp0rV"
 
 if [ "$UPDATE" == "true" ]; then
   IFS=$'\t'; get_db_data | while read -r country affiliation operators \
