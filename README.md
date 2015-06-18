@@ -6,9 +6,9 @@ Installation / Setup
 --------------------
 1. Download (as a minimum) the files: `fusionsync.sh`, `common.sh`, and `RUN_ME_FIRST.sh`
 2. Find out the relevant details:
-  * Your fusion table ID - Located in File > About this table when viewing the appropriate table
+  * Your fusion table ID - Located in File > About this table when viewing your fusion table
   * Your OAuth credentials - Can be found or set-up in the [Google Developer Console](https://console.developers.google.com/). To set up:
-    * Visit the link and select/create a new project
+    * Visit the Google Developer Console and select/create a new project
     * Activate the Fusion tables API. This can be done by clicking on 'API' in the sidebar, then searching for the relevant API
     * OAuth credentials require a product name. Click on 'Consent screen' in the sidebar, and enter an appropriate product name
     * Finally, click on 'Credentials' and under the 'OAuth' heading, click the 'Create new Client ID' button. Choose the 'Installed application' option on the pop-up window that appears
