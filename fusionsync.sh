@@ -16,7 +16,7 @@ source common.sh
 ensure_fresh_access_token
 
 usage() {
-  printf "Usage: fusionsync.sh [--update | --delete COUNTRY] --user DBUSER --password PASSWORD\n"
+  printf "Usage: fusionsync.sh [--update | --delete COUNTRY] --user DBUSER --password PASSWORD --tableid TABLEID\n"
 }
 
 # attempt connection to db with supplied credentials
