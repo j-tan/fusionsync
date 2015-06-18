@@ -23,3 +23,10 @@
   [ "${lines[0]}" = "Invalid user ''" ]
   [ "${lines[1]}" = "Usage: fusionsync.sh [--update | --delete COUNTRY] --user DBUSER --password PASSWORD --tableid TABLEID" ]
 }
+
+@test "no table ID provided" {
+  run ./fusionsync.sh --user usr --password password --tableid
+  [ "$status" -eq 1 ]
+  [ "${lines[0]}" = "No table ID provided" ]
+  [ "${lines[1]}" = "Usage: fusionsync.sh [--update | --delete COUNTRY] --user DBUSER --password PASSWORD --tableid TABLEID" ]
+}
