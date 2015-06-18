@@ -4,7 +4,7 @@ fusionsync is a script which allows the syncing of local drupal database data to
 
 Installation / Setup
 --------------------
-1. Download at a minimum the files: `fusionsync.sh`, `common.sh`, and `RUN_ME_FIRST.sh`
+1. Download (as a minimum) the files: `fusionsync.sh`, `common.sh`, and `RUN_ME_FIRST.sh`
 2. Find out the relevant details:
   * Your fusion table ID - Located in File > About this table when viewing the appropriate table
   * Your OAuth credentials - Can be found or set-up in the [Google Developer Console](https://console.developers.google.com/). To set up:
