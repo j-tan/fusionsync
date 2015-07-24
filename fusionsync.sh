@@ -32,7 +32,7 @@ get_db_data() {
   "SELECT country.field_country_value, \
   field_data_field_affiliation.field_affiliation_value, \
   field_data_field_operators.field_operators_value, \
-  field_data_field_signed_mou.field_signed_mou_value, \
+  field_data_field_mou.field_mou_value, \
   field_data_field_saml.field_saml_value, \
   field_data_field_saml_complete.field_saml_complete_value, \
   field_data_field_edugain.field_edugain_value, \
@@ -44,7 +44,7 @@ get_db_data() {
   FROM field_data_field_country AS country \
   LEFT JOIN field_data_field_affiliation ON country.entity_id = field_data_field_affiliation.entity_id \
   LEFT JOIN field_data_field_operators ON country.entity_id = field_data_field_operators.entity_id \
-  LEFT JOIN field_data_field_signed_mou ON country.entity_id = field_data_field_signed_mou.entity_id \
+  LEFT JOIN field_data_field_mou ON country.entity_id = field_data_field_mou.entity_id \
   LEFT JOIN field_data_field_saml ON country.entity_id = field_data_field_saml.entity_id \
   LEFT JOIN field_data_field_saml_complete ON country.entity_id = field_data_field_saml_complete.entity_id \
   LEFT JOIN field_data_field_edugain ON country.entity_id = field_data_field_edugain.entity_id \
@@ -135,7 +135,7 @@ fi
 
 if [ "$UPDATE" == "true" ]; then
   IFS=$'\t'; get_db_data | while read -r country affiliation operators \
-    signed_mou saml saml_complete edugain edugain_complete eduroam \
+    mou saml saml_complete edugain edugain_complete eduroam \
     eduroam_complete progress flag_url; do
     SQL_QUERY=$(encode_space_comma "SELECT ROWID FROM ${resourceID} WHERE \
       Location='$(encode_space_comma ${country})'")
@@ -150,7 +150,7 @@ if [ "$UPDATE" == "true" ]; then
     fi
     SQL_QUERY=$(encode_space_comma "INSERT INTO ${resourceID} \
       ('Location','Affiliation','Operators','SAML','eduGAIN',\
-      'eduroam','Signed MoU','Progress','FlagURL',\
+      'eduroam','MoU','Progress','FlagURL',\
       'SAML-complete','eduGAIN-complete','eduroam-complete') \
       VALUES ('$(escape_chars ${country})',\
       '$(escape_chars ${affiliation})',\
@@ -158,7 +158,7 @@ if [ "$UPDATE" == "true" ]; then
       '$(escape_chars ${saml})',\
       '$(escape_chars ${edugain})',\
       '$(escape_chars ${eduroam})',\
-      '$(escape_chars ${signed_mou})',\
+      '$(escape_chars ${mou})',\
       '$(escape_chars ${progress})',\
       '$(escape_chars ${flag_url})',\
       '$(escape_chars ${saml_complete})',\
